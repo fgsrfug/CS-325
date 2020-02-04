@@ -1,0 +1,29 @@
+Ensure all files are present, which are:
+
+    mergesort3.cpp
+    merge3Time.cpp
+    Makefile
+    README
+
+To compile all programs, simply type "make" or "make all" to create the
+executables.
+
+If you would like to make just mergesort3.cpp or the merge3Time.cpp,
+type "make sort" or "make time",
+
+To run an executable, type "./" before the name of the object file you would
+like to run. For example, type "./merge3Time.o" to run that executable.
+
+Making all files should result in the creation of the files below:
+
+    mergesort3.o
+    merge3Time.o
+
+Running mergesort3.o should create text files with ordered
+results called ""merge3.txt". In these files you will find the ordered lists.
+
+Running merge3Time.o will result in the size of the array and the
+time elapsed to be printed to the terminal.
+
+To set the size of the array in the Time function, change the value assigned to n in the functions, which should be line 234 for mergeTime.cpp.
+

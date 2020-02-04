@@ -1,0 +1,35 @@
+Ensure all files are present, which are:
+
+    insertsort.cpp
+    insertTime.cpp
+    mergesort.cpp
+    mergeTime.cpp
+    Makefile
+
+To compile all programs, simply type "make" or "make all" to create the
+executables.
+
+If you would like to make just the insert functions or the merge functions,
+type "make insert" or "make merge"
+
+To run an executable, type "./" before the name of the object file you would
+like to run. For example, type "./insertTime.o" to run that executable.
+
+Making these files should result in the creation of the files below:
+
+    insertsort.o
+    insertTime.o
+    mergesort.o
+    mergeTime.o
+
+Running insertsort.o and mergesort.o should create text files with ordered
+results called "insert.txt" and "merge.txt" respectively. In these files you
+will find the ordered lists.
+
+Running inserTime.o  mergeTime.o will result in the size of the array and the
+time elapsed to be printed to the terminal.
+
+To set the size of the array in the Time functions, change the value assigned
+to n in the functions, which should be line 179 for mergeTime.cpp and line 112
+for insertTime.cpp.
+
