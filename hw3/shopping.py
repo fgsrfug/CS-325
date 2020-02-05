@@ -3,58 +3,24 @@
 # Jesus Narvaez
 # CS 325 Homework 3
 # shopping.py
-# February 3rd, 2020
-# This file determines the largest value that
-# can be placed into a knapsack of weight W.
-# There is a recursive solution and a dynamic
-# solution. Both are timed and compared.
+# February 5th, 2020
+# This file essentially solves the knapsack
+#   problem for n people in a family, while
+#   keeping track of what items they grabbed.
+#   This file reads inputs from "shopping.txt"
+#   and writes the out to "results.txt"
 ############################################
 
-#Import modules for use
-from random import randint
-from random import seed
-import time
-
 ############################################
-# Function name: randomizeArray
-# Description: Given an array, it's size,
-#   and the max allowable random integer, the
-#   array is filled with random values
-############################################
-def randomizeArray(array, sizeOfArray, maxRandInt):
-    for i in range(0, sizeOfArray):
-        array.append(randint(0,maxRandInt))
-
-############################################
-# Function name: recursive
-# Description: Given value and weight arrays,
-#   the size of the arrays and max weight,
-#   a max value is determined. This method
-#   uses recursion to find a solution.
-############################################
-def recursive(val, weight, n, W):
-    #Check if we're out of items or if there
-    #is no room in the knapsack
-    if (n < 0 or W == 0):
-        return 0
-
-    #If the current item weight exceeds max
-    #weight, move on to the next item
-    if (weight[n] > W):
-        return recursive(val, weight, n - 1, W)
-
-    #Else, check if it's best to put the item in
-    #the knapsack or proceed without it
-    else:
-        maxValue = max(val[n] + recursive(val, weight, n - 1, W - weight[n]), recursive(val, weight, n - 1, W))
-        return maxValue
-
-############################################
-# Function name: recursive
+# Function name: dynamic
 # Description: Given value and weight arrays,
 #   the size of the arrays and max weight,
 #   a max value is determined. This method
 #   uses dynamic programming to find a solution.
+#   This method is altered to also keep track
+#   of which values are used in solution.
+#   Returns a list of the max value and the
+#   items in the solution.
 ############################################
 def dynamic(val, weight, n, W):
     #Create and initialize the table
@@ -78,8 +44,52 @@ def dynamic(val, weight, n, W):
             else:
                 table[i][w] = table[i - 1][w]
 
-    return table[n][W]
+    #Save result to total variable
+    total = table[n][W]
 
+    #Create list for when function returns and
+    #append the total to the start
+    returnList = []
+    returnList.append(total)
+
+    #Create a list to hold the items used
+    totalItemsList = []
+
+    #Iterate through the table to find items used
+    w = W
+    for i in range(n, 0, -1):
+        #Create list to hold items
+        itemsList = []
+
+        #If total is <= 0, no items were used
+        if total <= 0:
+            break
+
+        #If we find total, that item column corresponds
+        #to the item used
+        if total == table[i - 1][w]:
+            continue
+
+        #So add the item number and reduce the value and weight totals
+        else:
+            itemsList.append(i)
+            total = total - val[i - 1]
+            w = w - weight[i - 1]
+
+        #Add the entire list to the original list
+        totalItemsList.append(itemsList)
+
+    #Append items list to returnList and return
+    returnList.append(totalItemsList)
+    return returnList
+
+############################################
+# Function name: readFile
+# Description: Called within main to read
+#   input file called "shopping.txt". Sorts
+#   each of the values into the appropriate
+#   list and then returns all the lists.
+############################################
 def readFile():
 
     #Open shopping.txt for reading
@@ -107,7 +117,6 @@ def readFile():
         #Determine the number of items and add to caseValues
         numItems = f.readline()
         caseValues.append(int(numItems))
-        #print("numItems: {0}".format(int(numItems)))
 
         #Read and place item price and weight in
         #appropriate list
@@ -116,22 +125,15 @@ def readFile():
             casePrices.append(int(itemLine[0]))
             caseWeight.append(int(itemLine[1]))
 
-        #print("casePrices: {0}".format(casePrices))
-        #print("caseWeight: {0}".format(caseWeight))
-
         #Determine the number of people and add to caseValues
         numPeople = f.readline()
         caseValues.append(int(numPeople))
-        #print("numPeople: {0}".format(int(numPeople)))
 
         #Read the max weight for each person and put
         #into list
         for k in range(int(numPeople)):
             itemLine = f.readline()
             casePeopleWeight.append(int(itemLine))
-
-        #print("casePeopleWeight: {0}".format(casePeopleWeight))
-        #print("caseValues: {0}".format(caseValues))
 
         #Append each case list to the total list
         itemPrice.append(casePrices)
@@ -142,56 +144,70 @@ def readFile():
         #Increment the case counter
         i = i + 1
 
-#    print("casesList: {0}".format(casesList))
-#    print("itemPrice: {0}".format(itemPrice))
-#    print("itemWeight: {0}".format(itemWeight))
-#    print("peopleMaxWeight: {0}".format(peopleMaxWeight))
-
     #Return all the lists
     return itemPrice, itemWeight, peopleMaxWeight, casesList
 
-#    print("numCases: {0}".format(numCases))
-#    line = f.readlines()
-#    for i in line:
-#        if i == 1:
-#            print("i is zero. Also value is: {0}".format(i))
-#        print(i)
+############################################
+# Function name: writeFile
+# Description: Called within main to write
+#   the results of a test case to a file called
+#   "results.txt". It's passed in a list of
+#   all the results and the case number.
+############################################
+def writeFile(listToWrite, caseNum):
+    #Determine how many people to account for
+    numPeople = len(listToWrite)
 
+    #Open file for writing and write the case number
+    f = open("results.txt", "a")
+    f.write("Test Case {0}\n".format(caseNum + 1))
+
+    #Add the first value of each list in listToWrite
+    #to get total value and write it to file
+    value = 0
+    for i in range(numPeople):
+        value += listToWrite[i][0]
+
+    f.write("Total Price {0}\n".format(value))
+
+    #Write "Member Items as well the item numbers
+    f.write("Member Items\n")
+
+    #For each family memeber
+    for i in range(numPeople):
+        #Write the member numer
+        f.write("{0}: ".format((i + 1)))
+
+        #And write each item number in the list
+        for j in range(len(listToWrite[i][1])):
+            f.write("{0} ".format((listToWrite[i][1][j][0])))
+
+        f.write("\n")
+
+    #Close the file
+    f.close()
+
+############################################
+# Function name: shopping
+# Description: Called by main to find the max
+#   value each family member can carry. Calls
+#   dynamic (from knapsack problem) to find
+#   max each family member can carry. Returns
+#   total of list of family totals and items.
+############################################
 def shopping(itemsPrice, itemsWeight, maxWeights):
-    print("IN SHOPPING FUNCTION\n")
-    print("itemsPrice: {0}".format(itemsPrice))
-    print("itemsWeight: {0}".format(itemsWeight))
-    print("maxWeights: {0}".format(maxWeights))
 
-    densities = []
+    #Get number of people and items
     numPeople = len(maxWeights)
     numItems = len(itemsPrice)
 
-    for i in range():
-        densities.append(round((itemsPrice[i] / itemsWeight[i]), 2))
-
-    print("Densities: {0}".format(densities))
-    print("numPeople: {0}".format(numPeople))
-
-    peopleItems = []
-    peopleValues = []
-
+    #For each person, call dynamic and append result to peopleTotals
+    peopleTotals = []
     for i in range(numPeople):
-        personItems = []
-        personValues = []
-        personWeights = []
-        densitiesCarried = [0]
-        #Go through each item
-        for j in range(numItems):
-            #Check if it can be carried
-            if maxWeights[i] >= itemsWeight[j]:
-                #Check if it is worth carrying over current
-                #payload
-                if densities[i] > sum(densitiesCarried):
-                    personItems.append(j + 1)
-                    personValues.append(itemsPrice[j])
+        peopleTotals.append(dynamic(itemsPrice, itemsWeight, numItems, maxWeights[i]))
 
-
+    #Return list with totals of every case
+    return peopleTotals
 
 ############################################
 # Function name: main
@@ -203,45 +219,20 @@ def shopping(itemsPrice, itemsWeight, maxWeights):
 ############################################
 if __name__ == '__main__':
 
+    #Initialize lists to hold input data
     itemsPrice = []
     itemsWeight = []
     maxWeights = []
     caseDetails = []
+
+    #Get input data from file
     itemsPrice, itemsWeight, maxWeights, caseDetails = readFile()
 
-    print("caseDetails: {0}".format(caseDetails))
-    print("itemsPrice: {0}".format(itemsPrice))
-    print("itemsWeight: {0}".format(itemsWeight))
-    print("maxWeights: {0}".format(maxWeights))
+    #Get the number of cases  in file
+    numCases = len(caseDetails)
 
-    shopping(itemsPrice[0], itemsWeight[0], maxWeights[0])
-
-    #Set the number of items and max weight here!
-    n = 25
-    W = 10
-
-    #Set max random integer
-    maxRandInt = 10
-
-    #Seed random number generator
-    seed()
-
-    #Create and fill arrays with random values
-    val = []
-    weight = []
-    randomizeArray(val, n, maxRandInt)
-    randomizeArray(weight, n, maxRandInt)
-
-    #Time the recursive function
-    recStartTime = time.process_time()
-    recResult = recursive(val, weight, n - 1, W)
-    recTime = time.process_time() - recStartTime
-
-    #Time the dynamic function
-    dpStartTime = time.process_time()
-    dynResult = dynamic(val, weight, n, W)
-    dpTime = time.process_time() - dpStartTime
-
-    #print("\nn = {0}, W = {1}, DP time = {2}, Rec time = {3}, Max DP = {4}, Max Rec = {5}\n".format(n, W, round(dpTime, 4), round(recTime, 4), dynResult, recResult))
-
-
+    #For each case, call shopping and print results to file
+    for i in range(numCases):
+        results = shopping(itemsPrice[i], itemsWeight[i], maxWeights[i])
+        print("results: {0}".format(results))
+        writeFile(results, i)

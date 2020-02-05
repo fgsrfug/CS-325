@@ -17,6 +17,7 @@ knapsack:
 
 shopping:
 	clear
+	rm -f results.txt
 	${PYTHON} ${SRC_2}
 
 all: knapsack shopping
