@@ -2,7 +2,7 @@
 ############################################
 # Jesus Narvaez
 # CS 325 Homework 3
-# knapsack.py
+# shopping.py
 # February 3rd, 2020
 # This file determines the largest value that
 # can be placed into a knapsack of weight W.
@@ -79,6 +79,33 @@ def dynamic(val, weight, n, W):
                 table[i][w] = table[i - 1][w]
 
     return table[n][W]
+
+def readFile():
+    #Open shopping.txt for reading
+    f = open("shopping.txt", "r")
+    #Get the number of cases
+    numCases = f.readline()
+
+    itemPrice = []
+    itemWeight = []
+
+    i = 0
+    while (i < int(numCases)):
+        #Get the number of items to read
+        numItems = f.readline()
+        print(int(numItems))
+        for j in range(int(numItems)):
+            itemLine = f.readline()
+            print("itemLine: {0}".format(itemLine))
+
+#    print("numCases: {0}".format(numCases))
+#    line = f.readlines()
+#    for i in line:
+#        if i == 1:
+#            print("i is zero. Also value is: {0}".format(i))
+#        print(i)
+
+
 ############################################
 # Function name: main
 # Description: The driver of this file.
@@ -88,6 +115,8 @@ def dynamic(val, weight, n, W):
 #   dynamic() are timed and printed to stdout.
 ############################################
 if __name__ == '__main__':
+
+    readFile()
 
     #Set the number of items and max weight here!
     n = 25
@@ -115,6 +144,6 @@ if __name__ == '__main__':
     dynResult = dynamic(val, weight, n, W)
     dpTime = time.process_time() - dpStartTime
 
-    print("\nn = {0}, W = {1}, DP time = {2}, Rec time = {3}, Max DP = {4}, Max Rec = {5}\n".format(n, W, round(dpTime, 4), round(recTime, 4), dynResult, recResult))
+    #print("\nn = {0}, W = {1}, DP time = {2}, Rec time = {3}, Max DP = {4}, Max Rec = {5}\n".format(n, W, round(dpTime, 4), round(recTime, 4), dynResult, recResult))
 
 
