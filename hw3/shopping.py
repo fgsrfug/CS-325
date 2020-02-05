@@ -81,22 +81,74 @@ def dynamic(val, weight, n, W):
     return table[n][W]
 
 def readFile():
+
     #Open shopping.txt for reading
     f = open("shopping.txt", "r")
+
     #Get the number of cases
     numCases = f.readline()
 
+    #Create arrays to hold all data from file
     itemPrice = []
     itemWeight = []
+    peopleMaxWeight = []
+    casesList = []
 
+    #Iterate through file the number of cases there are present
     i = 0
     while (i < int(numCases)):
-        #Get the number of items to read
+
+        #Create lists that will case data
+        caseValues = []
+        casePrices = []
+        caseWeight = []
+        casePeopleWeight = []
+
+        #Determine the number of items and add to caseValues
         numItems = f.readline()
-        print(int(numItems))
+        caseValues.append(int(numItems))
+        #print("numItems: {0}".format(int(numItems)))
+
+        #Read and place item price and weight in
+        #appropriate list
         for j in range(int(numItems)):
+            itemLine = f.readline().split()
+            casePrices.append(int(itemLine[0]))
+            caseWeight.append(int(itemLine[1]))
+
+        #print("casePrices: {0}".format(casePrices))
+        #print("caseWeight: {0}".format(caseWeight))
+
+        #Determine the number of people and add to caseValues
+        numPeople = f.readline()
+        caseValues.append(int(numPeople))
+        #print("numPeople: {0}".format(int(numPeople)))
+
+        #Read the max weight for each person and put
+        #into list
+        for k in range(int(numPeople)):
             itemLine = f.readline()
-            print("itemLine: {0}".format(itemLine))
+            casePeopleWeight.append(int(itemLine))
+
+        #print("casePeopleWeight: {0}".format(casePeopleWeight))
+        #print("caseValues: {0}".format(caseValues))
+
+        #Append each case list to the total list
+        itemPrice.append(casePrices)
+        itemWeight.append(caseWeight)
+        peopleMaxWeight.append(casePeopleWeight)
+        casesList.append(caseValues)
+
+        #Increment the case counter
+        i = i + 1
+
+#    print("casesList: {0}".format(casesList))
+#    print("itemPrice: {0}".format(itemPrice))
+#    print("itemWeight: {0}".format(itemWeight))
+#    print("peopleMaxWeight: {0}".format(peopleMaxWeight))
+
+    #Return all the lists
+    return itemPrice, itemWeight, peopleMaxWeight, casesList
 
 #    print("numCases: {0}".format(numCases))
 #    line = f.readlines()
@@ -104,6 +156,41 @@ def readFile():
 #        if i == 1:
 #            print("i is zero. Also value is: {0}".format(i))
 #        print(i)
+
+def shopping(itemsPrice, itemsWeight, maxWeights):
+    print("IN SHOPPING FUNCTION\n")
+    print("itemsPrice: {0}".format(itemsPrice))
+    print("itemsWeight: {0}".format(itemsWeight))
+    print("maxWeights: {0}".format(maxWeights))
+
+    densities = []
+    numPeople = len(maxWeights)
+    numItems = len(itemsPrice)
+
+    for i in range():
+        densities.append(round((itemsPrice[i] / itemsWeight[i]), 2))
+
+    print("Densities: {0}".format(densities))
+    print("numPeople: {0}".format(numPeople))
+
+    peopleItems = []
+    peopleValues = []
+
+    for i in range(numPeople):
+        personItems = []
+        personValues = []
+        personWeights = []
+        densitiesCarried = [0]
+        #Go through each item
+        for j in range(numItems):
+            #Check if it can be carried
+            if maxWeights[i] >= itemsWeight[j]:
+                #Check if it is worth carrying over current
+                #payload
+                if densities[i] > sum(densitiesCarried):
+                    personItems.append(j + 1)
+                    personValues.append(itemsPrice[j])
+
 
 
 ############################################
@@ -116,7 +203,18 @@ def readFile():
 ############################################
 if __name__ == '__main__':
 
-    readFile()
+    itemsPrice = []
+    itemsWeight = []
+    maxWeights = []
+    caseDetails = []
+    itemsPrice, itemsWeight, maxWeights, caseDetails = readFile()
+
+    print("caseDetails: {0}".format(caseDetails))
+    print("itemsPrice: {0}".format(itemsPrice))
+    print("itemsWeight: {0}".format(itemsWeight))
+    print("maxWeights: {0}".format(maxWeights))
+
+    shopping(itemsPrice[0], itemsWeight[0], maxWeights[0])
 
     #Set the number of items and max weight here!
     n = 25
