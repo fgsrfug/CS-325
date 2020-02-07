@@ -21,8 +21,15 @@
 #   of which values are used in solution.
 #   Returns a list of the max value and the
 #   items in the solution.
+#   The item tracking portion was modeled off
+#   of the GeeksforGeeks algorithm for printing
+#   out items in knapsack problem, with adjustments
+#   to solve this particular problem. Their page
+#   can be found here:
+#   https://www.geeksforgeeks.org/printing-items-01-knapsack/
 ############################################
 def dynamic(val, weight, n, W):
+
     #Create and initialize the table
     table = [[0 for x in range(W + 1)] for x in range(n + 1)]
 
@@ -58,6 +65,7 @@ def dynamic(val, weight, n, W):
     #Iterate through the table to find items used
     w = W
     for i in range(n, 0, -1):
+
         #Create list to hold items
         itemsList = []
 
@@ -234,5 +242,5 @@ if __name__ == '__main__':
     #For each case, call shopping and print results to file
     for i in range(numCases):
         results = shopping(itemsPrice[i], itemsWeight[i], maxWeights[i])
-        print("results: {0}".format(results))
         writeFile(results, i)
+

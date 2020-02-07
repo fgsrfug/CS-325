@@ -90,11 +90,11 @@ def dynamic(val, weight, n, W):
 if __name__ == '__main__':
 
     #Set the number of items and max weight here!
-    n = 25
-    W = 10
+    n = 10
+    W = 50
 
     #Set max random integer
-    maxRandInt = 10
+    maxRandInt = 20
 
     #Seed random number generator
     seed()

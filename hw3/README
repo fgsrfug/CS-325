@@ -1,0 +1,23 @@
+Ensure all files are present, which are:
+
+    knapsack.py
+    shopping.py
+    Makefile
+    README
+
+To execute both programs, just type "make" or "make all".
+
+If you would like to just execute knapsack.py, type "make knapsack". If you
+wuold just want to execute shopping.py, type "make shopping"
+
+Executing knapsack.py should print the timed results of the recursive and
+dynamic programming solutions to the knapsack problem, along with other
+variables like size of array, max weight allowed and the solution for both
+methods.
+
+Executing shopping.py should output a file called results.txt. This file
+should hold the results of the shopping problem.
+
+The number of items, max weight, or max random value placed in the
+weight or val arrays, can all be changed within knapsack.py on lines 93, 94
+and 97 respectively.
