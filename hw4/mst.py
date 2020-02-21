@@ -126,17 +126,29 @@ def readFile(fileToRead):
     return orderedPairs, numVertices
 
 def distanceBetweenPoints(point1, point2):
+
+    #print("Point 1: {0}, Point 2: {1}".format(point1, point2))
     p1x, p1y = point1.split()
     p2x, p2y = point2.split()
-    print("p1x: {}".format(p1x))
-    print("p1y: {}".format(p1y))
-    print("p2x: {}".format(p2x))
-    print("p2y: {}".format(p2y))
+#    print("p1x: {}".format(p1x))
+#    print("p1y: {}".format(p1y))
+#    print("p2x: {}".format(p2x))
+#    print("p2y: {}".format(p2y))
 
     distance = round(math.sqrt(((int(p2x) - int(p1x))**2) + ((int(p2y) - int(p1y))**2)))
-    print(distance)
+    #print(distance)
 
     return distance
+
+def printAdjMatrix(matrix, numVertices):
+    i = 0
+    for i in range(numVertices):
+        curList = matrix[i]
+        j = 0
+        for i in range(numVertices - 1):
+            curEdge = curList[j]
+            #print(curEdge.weight)
+            print("Vertex {0} to {1} with weight {2}".format(i, curEdge.toVertex, curEdge.weight))
 
 ############################################
 # Function name: writeFile
@@ -200,6 +212,15 @@ def shopping(itemsPrice, itemsWeight, maxWeights):
     #Return list with totals of every case
     return peopleTotals
 
+class edge():
+    def __init__(self):
+        self.weight = 0
+        self.toVertex = -1
+
+    def updateData(self, weight, vertex):
+        self.weight = weight
+        self.toVertex = vertex
+
 ############################################
 # Function name: main
 # Description: The driver of this file.
@@ -213,7 +234,31 @@ if __name__ == '__main__':
     fileToRead = sys.argv[1]
     orderedPairs, numVertices = readFile(fileToRead)
 
-    distanceBetweenPoints(orderedPairs[3], orderedPairs[1])
+    numVertices = int(numVertices)
+    i = 0
+    adjMatrix = []
+    for i in range(numVertices):
+        vertexAdjList = []
+        j = 0
+        while (j < (numVertices)):
+            if (i == j):
+                j += 1
+            else:
+                curEdge = edge()
+                weight = distanceBetweenPoints(orderedPairs[i], orderedPairs[j])
+                curEdge.updateData(weight, j)
+                print("From {0} to {1} with weight {2}".format(i, curEdge.toVertex, curEdge.weight))
+                vertexAdjList.append(curEdge)
+                #print(vertexAdjList[j].weight)
+                j += 1
+
+        adjMatrix.append(vertexAdjList)
+
+    #print("\n")
+    #printAdjMatrix(adjMatrix, numVertices)
+    #print(adjMatrix)
+
+    #distanceBetweenPoints(orderedPairs[3], orderedPairs[1])
 
 """
     #Initialize lists to hold input data
