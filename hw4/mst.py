@@ -192,7 +192,7 @@ def readFile(fileToRead):
         i += 1
 
     orderedPairs = readPairs[0]
-    print(orderedPairs)
+    #print(orderedPairs)
     #Return all the lists
     return orderedPairs, numVertices
 
@@ -259,7 +259,7 @@ def findMinimum(listToSearch, indicesToCheck):
                 else:
                     continue
 
-    print("minVal and Index: {0}, {1}".format(minVal, minIndex))
+    #print("minVal and Index: {0}, {1}".format(minVal, minIndex))
 
     return minIndex
 
@@ -278,24 +278,24 @@ def findMST(adjMatrix, numVertices):
     changedWeightVer = []
     for i in range(numVertices):
         changedWeightVer.append(-1)
-    print(key)
-    print(verticesInMST)
-    print(verticesNotInMST)
+    #print(key)
+    #print(verticesInMST)
+    #print(verticesNotInMST)
 
 
     while(len(verticesNotInMST) > 0):
 
         #Find vertex with lowest key value
         curVer = findMinimum(key, verticesNotInMST)
-        print("curVer: {}".format(curVer))
+        #print("curVer: {}".format(curVer))
 
         for curEdge in adjMatrix[curVer]:
 
-            print("adjv weight: {0}, and other vertex: {1}".format(curEdge.weight, curEdge.toVertex))
+            #print("adjv weight: {0}, and other vertex: {1}".format(curEdge.weight, curEdge.toVertex))
 
-            print("keyval at curEdge: {}".format(key[curEdge.toVertex]))
+           # print("keyval at curEdge: {}".format(key[curEdge.toVertex]))
             if ((curEdge.toVertex in verticesNotInMST) and (curEdge.weight < key[curEdge.toVertex])):
-                print("ADJUSTING KEY VALUE")
+            #    print("ADJUSTING KEY VALUE")
                 key[curEdge.toVertex] = curEdge.weight
                 changedWeightVer[curEdge.toVertex] = curVer
 
@@ -303,11 +303,22 @@ def findMST(adjMatrix, numVertices):
             verticesNotInMST.remove(curVer)
             verticesInMST.append(curVer)
 
-        print("Not in MST: {}".format(verticesNotInMST))
-        print("In MST: {}".format(verticesInMST))
-        print("CWV: {}".format(changedWeightVer))
-        print("key: {}\n".format(key))
+        #print("Not in MST: {}".format(verticesNotInMST))
+        #print("In MST: {}".format(verticesInMST))
+        #print("CWV: {}".format(changedWeightVer))
+        #print("key: {}\n".format(key))
 
+    return key, changedWeightVer
+
+def printResults(numVertices, weights, vertices, orderedPairs):
+
+    totalWeight = 0
+    print("Edges in MST")
+    print("Point (x, y)     Distance")
+    for i in range(1, numVertices):
+        print("({0}) - ({1})        {2} ".format(orderedPairs[vertices[i]], orderedPairs[i], weights[i]))
+        totalWeight += weights[i]
+    print("     Total Distance {0}".format(totalWeight))
 ############################################
 # Function name: main
 # Description: The driver of this file.
@@ -325,8 +336,9 @@ if __name__ == '__main__':
 
     adjMatrix = createAdjMatrix(numVertices)
     #printAdjMatrix(adjMatrix, numVertices)
-    findMST(adjMatrix, numVertices)
+    treeWeights, treeVertices = findMST(adjMatrix, numVertices)
 
+    printResults(numVertices, treeWeights, treeVertices, orderedPairs)
     #numbers = [2, 4, -100, 3232, 69, 1]
     #findMinimum(numbers)
 """
