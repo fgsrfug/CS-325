@@ -244,18 +244,22 @@ def createAdjMatrix(numVertices):
 
     return adjMatrix
 
-def findMinimum(listToSearch):
+def findMinimum(listToSearch, indicesToCheck):
 
-    minVal = listToSearch[0]
+    minVal = 100000
     minIndex = 0
     for i in range(1, len(listToSearch)):
-        if (listToSearch[i] == -100):
+        if (listToSearch[i] == 100000):
             continue
         if (listToSearch[i] < minVal):
-            minVal = listToSearch[i]
-            minIndex = i
+            for j in indicesToCheck:
+                if i == j:
+                    minVal = listToSearch[i]
+                    minIndex = i
+                else:
+                    continue
 
-    #print("minVal and Index: {0}, {1}".format(minVal, minIndex))
+    print("minVal and Index: {0}, {1}".format(minVal, minIndex))
 
     return minIndex
 
@@ -265,35 +269,44 @@ def findMST(adjMatrix, numVertices):
     verticesInMST = []
     verticesNotInMST = []
     for i in range(numVertices):
+        verticesNotInMST.append(i)
         if i == 0:
             key.append(0)
         else:
-            key.append(-100)
-            verticesNotInMST.append(i)
+            key.append(100000)
+
+    changedWeightVer = []
+    for i in range(numVertices):
+        changedWeightVer.append(-1)
     print(key)
     print(verticesInMST)
     print(verticesNotInMST)
 
-    x = 10
-    while(len(verticesNotInMST) > 0 or (x > 0)):
 
-        print("x is: {}".format(x))
+    while(len(verticesNotInMST) > 0):
+
         #Find vertex with lowest key value
-        curVer = findMinimum(key)
+        curVer = findMinimum(key, verticesNotInMST)
         print("curVer: {}".format(curVer))
-        for adjVer in adjMatrix[curVer]:
-            print("adjv weight: {0}, and other vertex: {1}".format(adjVer.weight, adjVer.toVertex))
-            if ((adjVer.toVertex in verticesNotInMST) and (adjVer.weight < key[adjVer.toVertex])):
-                key[adjVer.toVertex] = adjVer.weight
-                verticesInMST.append(adjVer.toVertex)
 
-        if (curVer in verticesNotInMST):
+        for curEdge in adjMatrix[curVer]:
+
+            print("adjv weight: {0}, and other vertex: {1}".format(curEdge.weight, curEdge.toVertex))
+
+            print("keyval at curEdge: {}".format(key[curEdge.toVertex]))
+            if ((curEdge.toVertex in verticesNotInMST) and (curEdge.weight < key[curEdge.toVertex])):
+                print("ADJUSTING KEY VALUE")
+                key[curEdge.toVertex] = curEdge.weight
+                changedWeightVer[curEdge.toVertex] = curVer
+
+        if((curVer in verticesNotInMST) and (curVer not in verticesInMST)):
             verticesNotInMST.remove(curVer)
-
-        x = x - 1
+            verticesInMST.append(curVer)
 
         print("Not in MST: {}".format(verticesNotInMST))
         print("In MST: {}".format(verticesInMST))
+        print("CWV: {}".format(changedWeightVer))
+        print("key: {}\n".format(key))
 
 ############################################
 # Function name: main
@@ -314,8 +327,8 @@ if __name__ == '__main__':
     #printAdjMatrix(adjMatrix, numVertices)
     findMST(adjMatrix, numVertices)
 
-    numbers = [2, 4, -100, 3232, 69, 1]
-    findMinimum(numbers)
+    #numbers = [2, 4, -100, 3232, 69, 1]
+    #findMinimum(numbers)
 """
     #Initialize lists to hold input data
     itemsPrice = []
