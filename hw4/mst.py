@@ -95,63 +95,6 @@ def dynamic(val, weight, n, W):
     return returnList
 
 ############################################
-# Function name: readFile
-# Description: Called within main to read
-#   input file called "shopping.txt". Sorts
-#   each of the values into the appropriate
-#   list and then returns all the lists.
-############################################
-def readFile(fileToRead):
-
-    #Open shopping.txt for reading
-    f = open(fileToRead, "r")
-
-    #Get the number of cases
-    numVertices = f.readline()
-
-    #Create arrays to hold all data from file
-    readPairs = []
-
-    #Iterate through file the number of cases there are present
-    i = 0
-    while (i < int(numVertices)):
-
-        #Create lists that will case data
-        readPairs.append(f.read().splitlines())
-        i += 1
-
-    orderedPairs = readPairs[0]
-    print(orderedPairs)
-    #Return all the lists
-    return orderedPairs, numVertices
-
-def distanceBetweenPoints(point1, point2):
-
-    #print("Point 1: {0}, Point 2: {1}".format(point1, point2))
-    p1x, p1y = point1.split()
-    p2x, p2y = point2.split()
-#    print("p1x: {}".format(p1x))
-#    print("p1y: {}".format(p1y))
-#    print("p2x: {}".format(p2x))
-#    print("p2y: {}".format(p2y))
-
-    distance = round(math.sqrt(((int(p2x) - int(p1x))**2) + ((int(p2y) - int(p1y))**2)))
-    #print(distance)
-
-    return distance
-
-def printAdjMatrix(matrix, numVertices):
-    i = 0
-    for i in range(numVertices):
-        #curList = matrix[i][0]
-        j = 0
-        for j in range(numVertices - 1):
-            #curEdge = edge()
-            #curEdge = curList[j]
-            #print(curEdge.weight)
-            print("Vertex {0} to {1} with weight {2}".format(i, matrix[i][j].toVertex, matrix[i][j].weight))
-
-############################################
 # Function name: writeFile
 # Description: Called within main to write
 #   the results of a test case to a file called
@@ -223,19 +166,63 @@ class edge():
         self.toVertex = vertex
 
 ############################################
-# Function name: main
-# Description: The driver of this file.
-#   The number of elements, max weight, max
-#   random integer is set, and the val and
-#   weight arrays are created. recursive() and
-#   dynamic() are timed and printed to stdout.
+# Function name: readFile
+# Description: Called within main to read
+#   input file called "shopping.txt". Sorts
+#   each of the values into the appropriate
+#   list and then returns all the lists.
 ############################################
-if __name__ == '__main__':
+def readFile(fileToRead):
 
-    fileToRead = sys.argv[1]
-    orderedPairs, numVertices = readFile(fileToRead)
+    #Open shopping.txt for reading
+    f = open(fileToRead, "r")
 
-    numVertices = int(numVertices)
+    #Get the number of cases
+    numVertices = f.readline()
+
+    #Create arrays to hold all data from file
+    readPairs = []
+
+    #Iterate through file the number of cases there are present
+    i = 0
+    while (i < int(numVertices)):
+
+        #Create lists that will case data
+        readPairs.append(f.read().splitlines())
+        i += 1
+
+    orderedPairs = readPairs[0]
+    print(orderedPairs)
+    #Return all the lists
+    return orderedPairs, numVertices
+
+def distanceBetweenPoints(point1, point2):
+
+    #print("Point 1: {0}, Point 2: {1}".format(point1, point2))
+    p1x, p1y = point1.split()
+    p2x, p2y = point2.split()
+#    print("p1x: {}".format(p1x))
+#    print("p1y: {}".format(p1y))
+#    print("p2x: {}".format(p2x))
+#    print("p2y: {}".format(p2y))
+
+    distance = round(math.sqrt(((int(p2x) - int(p1x))**2) + ((int(p2y) - int(p1y))**2)))
+    #print(distance)
+
+    return distance
+
+def printAdjMatrix(matrix, numVertices):
+    i = 0
+    for i in range(numVertices):
+        #curList = matrix[i][0]
+        j = 0
+        for j in range(numVertices - 1):
+            #curEdge = edge()
+            #curEdge = curList[j]
+            #print(curEdge.weight)
+            print("Vertex {0} to {1} with weight {2}".format(i, matrix[i][j].toVertex, matrix[i][j].weight))
+
+def createAdjMatrix(numVertices):
     i = 0
     adjMatrix = []
     for i in range(numVertices):
@@ -255,11 +242,45 @@ if __name__ == '__main__':
 
         adjMatrix.append(vertexAdjList)
 
-    #print("\n")
-    printAdjMatrix(adjMatrix, numVertices)
-    #print(adjMatrix)
+    return adjMatrix
 
-    #distanceBetweenPoints(orderedPairs[3], orderedPairs[1])
+def findMST(adjMatrix, numVertices):
+    i = 0
+    key = []
+    verticesInMST = [0]
+    verticesNotInMST = []
+    for i in range(numVertices):
+        if i == 0:
+            key.append(0)
+        else:
+            key.append(-100)
+            verticesNotInMST.append(i)
+    print(key)
+    print(verticesInMST)
+    print(verticesNotInMST)
+
+    while(verticesNotInMST != 0):
+        adjMatrix
+
+
+############################################
+# Function name: main
+# Description: The driver of this file.
+#   The number of elements, max weight, max
+#   random integer is set, and the val and
+#   weight arrays are created. recursive() and
+#   dynamic() are timed and printed to stdout.
+############################################
+if __name__ == '__main__':
+
+    fileToRead = sys.argv[1]
+    orderedPairs, numVertices = readFile(fileToRead)
+
+    numVertices = int(numVertices)
+
+    adjMatrix = createAdjMatrix(numVertices)
+    #printAdjMatrix(adjMatrix, numVertices)
+    findMST(adjMatrix, numVertices)
 
 """
     #Initialize lists to hold input data
