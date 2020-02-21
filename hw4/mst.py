@@ -143,12 +143,13 @@ def distanceBetweenPoints(point1, point2):
 def printAdjMatrix(matrix, numVertices):
     i = 0
     for i in range(numVertices):
-        curList = matrix[i]
+        #curList = matrix[i][0]
         j = 0
-        for i in range(numVertices - 1):
-            curEdge = curList[j]
+        for j in range(numVertices - 1):
+            #curEdge = edge()
+            #curEdge = curList[j]
             #print(curEdge.weight)
-            print("Vertex {0} to {1} with weight {2}".format(i, curEdge.toVertex, curEdge.weight))
+            print("Vertex {0} to {1} with weight {2}".format(i, matrix[i][j].toVertex, matrix[i][j].weight))
 
 ############################################
 # Function name: writeFile
@@ -247,15 +248,15 @@ if __name__ == '__main__':
                 curEdge = edge()
                 weight = distanceBetweenPoints(orderedPairs[i], orderedPairs[j])
                 curEdge.updateData(weight, j)
-                print("From {0} to {1} with weight {2}".format(i, curEdge.toVertex, curEdge.weight))
+                #print("From {0} to {1} with weight {2}".format(i, curEdge.toVertex, curEdge.weight))
                 vertexAdjList.append(curEdge)
-                #print(vertexAdjList[j].weight)
+                #print(vertexAdjList)
                 j += 1
 
         adjMatrix.append(vertexAdjList)
 
     #print("\n")
-    #printAdjMatrix(adjMatrix, numVertices)
+    printAdjMatrix(adjMatrix, numVertices)
     #print(adjMatrix)
 
     #distanceBetweenPoints(orderedPairs[3], orderedPairs[1])
