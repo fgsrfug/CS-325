@@ -1,0 +1,14 @@
+Ensure all files are present, which are:
+
+    mstEuclid.py
+    Makefile
+    README
+
+To execute the program, just type "make" or "make all" or "make mst".
+
+To change the file read in from the command line, enter the Makefile and
+change TXT_1 to the name of the file to search test on.
+
+The program should print out the the edges and the points that make a MST of
+the graph. I know the text is not lined up. I tried to fix it. I have math
+homework to do.
